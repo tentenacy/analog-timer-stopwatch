@@ -50,15 +50,8 @@ BEGIN_MESSAGE_MAP(CTab1, CDialogEx)
 	ON_WM_CTLCOLOR()
 	ON_MESSAGE(THREAD_TIMER, TimerThreadUpdate)
 	ON_WM_SHOWWINDOW()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
-
-void CALLBACK SystemCounterCallback(HWND hWnd, UINT nID, UINT nEl, DWORD time) {
-	CWnd* pWnd = AfxGetMainWnd();
-	CAnalogTimerStopwatchDlg* pParent = (CAnalogTimerStopwatchDlg*)pWnd;
-
-	pParent->mDlg1->mSystemCounter->TicTok();
-	pParent->mDlg1->GetDlgItem(IDC_STATIC_COUNTER)->SetWindowTextW(pParent->mDlg1->mSystemCounter->GetTimeFormatted());
-}
 
 UINT TimerThread(LPVOID param)
 {
@@ -166,7 +159,7 @@ BOOL CTab1::OnInitDialog()
 
 	mSystemCounter = new CustomSystemCounter;
 	GetDlgItem(IDC_STATIC_COUNTER)->SetWindowTextW(mSystemCounter->GetTimeFormatted());
-	SetTimer(IDE_SYSTEM_COUNTER, 1000, SystemCounterCallback);
+	SetTimer(IDE_SYSTEM_COUNTER, 1000, NULL);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
@@ -347,4 +340,17 @@ void CTab1::OnDrawProgressImage()
 	memG.DrawArc(&OrangePen, (rect.left + rect.right) / 2 - 160, (rect.top + rect.bottom) / 2 - 160, 320, 320, -90, mProgressSweepAngle);
 	// 임시 버퍼를 Picture Control에 그리기.
 	mainG.DrawImage(&memBmp, 0, 0);
+}
+
+void CTab1::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	switch (nIDEvent) {
+	case IDE_SYSTEM_COUNTER:
+		mSystemCounter->TicTok();
+		GetDlgItem(IDC_STATIC_COUNTER)->SetWindowTextW(mSystemCounter->GetTimeFormatted());
+		break;
+	}
+
+	CDialogEx::OnTimer(nIDEvent);
 }

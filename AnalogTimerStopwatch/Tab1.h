@@ -71,4 +71,5 @@ public:
 	afx_msg void OnBnClickedButtonStart();
 	void OnDrawProgressImage();
 	double mProgressSweepAngle;
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
