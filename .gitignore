@@ -54,3 +54,4 @@ Release
 *.dll
 
 *.lib
+/AnalogTimerStopwatch.VC.VC.opendb

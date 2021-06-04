@@ -101,20 +101,14 @@ LRESULT CTab1::TimerThreadUpdate(WPARAM wParam, LPARAM lParam)
 		GetDlgItem(IDC_STATIC_TIMER)->SetWindowTextW(mTimer->GetTimeFormatted());
 		break;
 	case THREAD_UPDATE_PROGRESS:
-		if (mProgressSweepAngle >= 0) {
-			mProgressSweepAngle = 360 - 360 * (pParam->time / 1000 / (mHour * 60 * 60 + mMinute * 60 + mSecond));
-		}
-		else {
-			mProgressSweepAngle = 0;
-		}
+		mProgressSweepAngle = max(360 - 360 * (pParam->time / 1000 / (mHour * 60 * 60 + mMinute * 60 + mSecond)), 0);
 		OnDrawProgressImage();
 		break;
 	case THREAD_UDPATE_TIMEOUT:
 		isTimerStarted = FALSE;
 		HideTimer();
 		mThreadTimerWork = THREAD_STOP;
-		Invalidate(TRUE);
-		mProgressSweepAngle = 0;
+		AfxMessageBox(_T("타이머 알림"));
 		break;
 	}
 	
@@ -199,7 +193,6 @@ void CTab1::OnBnClickedButtonStart()
 void CTab1::ShowTimer()
 {
 	GetDlgItem(IDC_BUTTON_STOP)->EnableWindow(TRUE);
-	GetDlgItem(IDC_PC_PROGRESS)->ShowWindow(SW_SHOW);
 	GetDlgItem(IDC_STATIC_TIMER)->ShowWindow(SW_SHOW);
 	GetDlgItem(IDC_STATIC_COUNTER)->ShowWindow(SW_SHOW);
 	GetDlgItem(IDC_STATIC_HOUR)->ShowWindow(SW_HIDE);
@@ -215,7 +208,6 @@ void CTab1::ShowTimer()
 void CTab1::HideTimer()
 {
 	GetDlgItem(IDC_BUTTON_STOP)->EnableWindow(FALSE);
-	GetDlgItem(IDC_PC_PROGRESS)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_STATIC_TIMER)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_STATIC_COUNTER)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_STATIC_HOUR)->ShowWindow(SW_SHOW);
@@ -253,8 +245,6 @@ void CTab1::StopTimer()
 	mTimer = NULL;
 
 	mThreadTimerWork = THREAD_STOP;
-	Invalidate(TRUE);
-	mProgressSweepAngle = 0;
 }
 
 
@@ -269,7 +259,12 @@ void CTab1::OnDestroy()
 
 void CTab1::OnDraw(CDC* pDC) {
 	if (mThreadTimerWork == THREAD_STOP) {
-		SetBackgroundColor(Color::White);
+		CClientDC dc(GetDlgItem(IDC_PC_PROGRESS));
+		Graphics graphics(dc);
+		graphics.Clear(Color::White);
+	}
+	else if (mThreadTimerWork == THREAD_PAUSE) {
+		OnDrawProgressImage();
 	}
 }
 
