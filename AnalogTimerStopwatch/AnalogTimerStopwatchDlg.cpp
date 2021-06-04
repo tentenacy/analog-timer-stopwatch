@@ -47,10 +47,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
-
 // CAnalogTimerStopwatchDlg 대화 상자
-
-
 
 CAnalogTimerStopwatchDlg::CAnalogTimerStopwatchDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_ANALOGTIMERSTOPWATCH_DIALOG, pParent)
@@ -72,6 +69,25 @@ BEGIN_MESSAGE_MAP(CAnalogTimerStopwatchDlg, CDialogEx)
 	ON_COMMAND(ID_32771, &CAnalogTimerStopwatchDlg::On32771)
 END_MESSAGE_MAP()
 
+HHOOK g_hook = NULL;
+
+LRESULT CALLBACK KeyboardHookProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+	LPKBDLLHOOKSTRUCT pkbhs = (LPKBDLLHOOKSTRUCT)lParam;
+	if (nCode == HC_ACTION)
+	{
+		if (GetAsyncKeyState(VK_CONTROL) < 0 && pkbhs->vkCode == 'X')
+		{
+			DWORD dwFlags = (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) ? 0 : KEYEVENTF_KEYUP;
+			if (dwFlags == 0)
+			{
+				AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_APP_EXIT, 0);
+				return TRUE;
+			}
+		}
+	}
+	return CallNextHookEx(g_hook, nCode, wParam, lParam);
+}
 
 // CAnalogTimerStopwatchDlg 메시지 처리기
 
@@ -105,6 +121,8 @@ BOOL CAnalogTimerStopwatchDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	SetHook();
+
 	mTab.InsertItem(0, _T("타이머"));
 	mTab.InsertItem(1, _T("스톱워치"));
 
@@ -201,4 +219,31 @@ void CAnalogTimerStopwatchDlg::On32771()
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	CSettingTimerDlg dlg;
 	dlg.DoModal();
+}
+
+BOOL CAnalogTimerStopwatchDlg::SetHook()
+{
+	if (g_hook != NULL)
+		UnHook();
+	g_hook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardHookProc, (HINSTANCE)theApp.m_hInstance, NULL);
+
+	return TRUE;
+}
+
+BOOL CAnalogTimerStopwatchDlg::UnHook()
+{
+	if (g_hook != NULL)
+	{
+		UnhookWindowsHookEx(g_hook);
+	}
+	return TRUE;
+}
+
+
+BOOL CAnalogTimerStopwatchDlg::DestroyWindow()
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	UnHook();
+
+	return CDialogEx::DestroyWindow();
 }

@@ -42,4 +42,7 @@ public:
 	CTabCtrl mTab;
 	afx_msg void OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void On32771();
+	BOOL SetHook();
+	BOOL UnHook();
+	virtual BOOL DestroyWindow();
 };

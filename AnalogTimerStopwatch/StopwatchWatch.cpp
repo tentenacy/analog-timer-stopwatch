@@ -310,12 +310,14 @@ void CStopwatchWatch::StopWatch()
 void CStopwatchWatch::ResumeWatch()
 {
 	mThreadStopwatchWatch->ResumeThread();
+	mThreadStopwatchWatchWork = THREAD_RUNNING;
 }
 
 
 void CStopwatchWatch::PauseWatch()
 {
 	mThreadStopwatchWatch->SuspendThread();
+	mThreadStopwatchWatchWork = THREAD_PAUSE;
 }
 
 void CStopwatchWatch::OnPaint()
