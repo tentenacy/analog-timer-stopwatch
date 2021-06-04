@@ -3,8 +3,6 @@
 #include "CustomTImer.h"
 #include "CustomSystemCounter.h"
 
-#define THREAD_TIMER WM_USER
-
 enum ThreadTimerUpdateParamType
 {
 	THREAD_UPDATE_TIMER = 1,

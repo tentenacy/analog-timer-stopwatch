@@ -3,17 +3,10 @@
 #include "CustomStopwatch.h"
 #include "StopwatchWatch.h"
 
-#define THREAD_STOPWATCH WM_USER + (1 << 1)
-
 enum ThreadStopwatchUpdateParamType
 {
 	THREAD_UPDATE_STOPWATCH = 1,
 	THREAD_UPDATE_LAB
-};
-
-struct ThreadStopwatchUpdateParam {
-	CustomStopwatch* stopwatch;
-	double time;
 };
 
 struct ThreadStopwatchParam {
@@ -61,9 +54,9 @@ public:
 	afx_msg void OnPaint();
 	afx_msg void OnDestroy();
 
-
 	CListCtrl mLabList;
 	CustomStopwatch *mStopwatch;
 	void AllocateWatch();
 	CStopwatchWatch* mWatchSecond;
+	CStopwatchWatch* mWatchMinute;
 };

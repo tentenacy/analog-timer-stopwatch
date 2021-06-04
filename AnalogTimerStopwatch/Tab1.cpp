@@ -329,8 +329,8 @@ void CTab1::OnDrawProgressImage()
 	memG.Clear(Color::White);
 
 	// 그리는 작업.
-	Pen DarkGrayPen(Color(255, 38, 37, 44), 3);
-	Pen OrangePen(Color(255, 251, 160, 11), 3);
+	Pen DarkGrayPen(Color(255, 38, 37, 44));
+	Pen OrangePen(Color(255, 251, 160, 11));
 	OrangePen.SetWidth(8.0f);
 	DarkGrayPen.SetWidth(7.5f);
 	OrangePen.SetStartCap(LineCapRound);

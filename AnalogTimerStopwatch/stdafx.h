@@ -5,6 +5,15 @@
 
 #pragma once
 
+#define THREAD_TIMER WM_USER
+#define THREAD_STOPWATCH WM_USER + (1 << 1)
+#define THREAD_STOPWATCH_WATCH WM_USER + (1 << 2)
+
+enum WatchMode {
+	MODE_SECOND = 1,
+	MODE_MINUTE
+};
+
 enum ThreadWorkingType
 {
 	THREAD_STOP = 0,

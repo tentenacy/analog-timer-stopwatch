@@ -18,6 +18,7 @@ CTab2::CTab2(CWnd* pParent /*=NULL*/)
 	, mThreadStopwatch(NULL)
 	, mStopwatch(NULL)
 	, mWatchSecond(NULL)
+	, mWatchMinute(NULL)
 {
 
 }
@@ -125,9 +126,11 @@ BOOL CTab2::OnInitDialog()
 	AllocateWatch();
 
 	mWatchSecond->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
+	mWatchMinute->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
 	GetDlgItem(IDC_STATIC_STOPWATCH)->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
 	GetDlgItem(IDC_BUTTON_START)->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
 	GetDlgItem(IDC_BUTTON_LAB)->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
+	mWatchMinute->BringWindowToTop();
 	GetDlgItem(IDC_STATIC_STOPWATCH)->BringWindowToTop();
 	GetDlgItem(IDC_BUTTON_START)->BringWindowToTop();
 	GetDlgItem(IDC_BUTTON_LAB)->BringWindowToTop();
@@ -174,12 +177,16 @@ void CTab2::OnBnClickedButtonStart()
 		GetDlgItem(IDC_BUTTON_LAB)->SetWindowTextW(_T("재설정"));
 		mThreadStopwatch->SuspendThread();
 		mThreadStopwatchWork = THREAD_PAUSE;
+		mWatchSecond->PauseWatch();
+		mWatchMinute->PauseWatch();
 	}
 	else if (mThreadStopwatchWork == THREAD_PAUSE) {
 		GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("중단"));
 		GetDlgItem(IDC_BUTTON_LAB)->SetWindowTextW(_T("랩"));
 		mThreadStopwatch->ResumeThread();
 		mThreadStopwatchWork = THREAD_RUNNING;
+		mWatchSecond->ResumeWatch();
+		mWatchMinute->ResumeWatch();
 	}
 }
 
@@ -211,6 +218,9 @@ void CTab2::StartStopwatch() {
 	mThreadStopwatch = AfxBeginThread(StopwatchThread, &mThreadStopwatchParam);
 
 	mThreadStopwatchWork = THREAD_RUNNING;
+
+	mWatchSecond->StartWatch(mStopwatch);
+	mWatchMinute->StartWatch(mStopwatch);
 }
 
 
@@ -227,11 +237,15 @@ void CTab2::StopStopwatch() {
 	mThreadStopwatch = NULL;
 
 	delete mStopwatch;
+	mStopwatch = NULL;
 	mLabList.DeleteAllItems();
 
 	mThreadStopwatchWork = THREAD_STOP;
 	Invalidate(TRUE);
 	GetDlgItem(IDC_STATIC_STOPWATCH)->SetWindowTextW(_T("00:00.00"));
+
+	mWatchSecond->StopWatch();
+	mWatchMinute->StopWatch();
 }
 
 void CTab2::OnDraw(CDC* pDC) {
@@ -277,4 +291,14 @@ void CTab2::AllocateWatch()
 	mWatchSecond->MoveWindow(&rect);
 
 	GetDlgItem(IDC_PC_SECOND)->DestroyWindow();
+
+	GetDlgItem(IDC_PC_MINUTE)->GetWindowRect(&rect);
+	ScreenToClient(&rect);
+
+	mWatchMinute = new CStopwatchWatch(MODE_MINUTE, 6, 30, 2, 5.0f, 2.5f, 6, 3, 10, 20);
+	mWatchMinute->Create(IDD_DIALOG_WATCH, this);
+	mWatchMinute->ShowWindow(SW_SHOW);
+	mWatchMinute->MoveWindow(&rect);
+
+	GetDlgItem(IDC_PC_MINUTE)->DestroyWindow();
 }
