@@ -64,7 +64,7 @@ UINT StopwatchWatchThread(LPVOID param)
 
 	for (; pMain->mThreadStopwatchWatchWork == THREAD_RUNNING; ) {
 		::PostMessage(pMain->m_hWnd, THREAD_STOPWATCH_WATCH, NULL, NULL);
-		Sleep(2);
+		Sleep(16);
 	}
 	return 0;
 }
