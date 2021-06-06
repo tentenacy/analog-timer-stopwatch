@@ -108,7 +108,7 @@ LRESULT CTab1::TimerThreadUpdate(WPARAM wParam, LPARAM lParam)
 		isTimerStarted = FALSE;
 		HideTimer();
 		mThreadTimerWork = THREAD_STOP;
-		AfxMessageBox(_T("타이머 알림"));
+		AfxMessageBox(_T("Timer Notification"));
 		break;
 	}
 	
@@ -178,12 +178,12 @@ void CTab1::OnBnClickedButtonStart()
 		return;
 	}
 	if (mThreadTimerWork == THREAD_RUNNING) {
-		GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("재개"));
+		GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("Resume"));
 		mThreadTimer->SuspendThread();
 		mThreadTimerWork = THREAD_PAUSE;
 	}
 	else if (mThreadTimerWork == THREAD_PAUSE) {
-		GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("일시정지"));
+		GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("Pause"));
 		mThreadTimer->ResumeThread();
 		mThreadTimerWork = THREAD_RUNNING;
 	}
@@ -201,7 +201,7 @@ void CTab1::ShowTimer()
 	GetDlgItem(IDC_EDIT_HOUR)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_EDIT_MINUTE)->ShowWindow(SW_HIDE);
 	GetDlgItem(IDC_EDIT_SECOND)->ShowWindow(SW_HIDE);
-	GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("일시정지"));
+	GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("Pause"));
 }
 
 
@@ -216,7 +216,7 @@ void CTab1::HideTimer()
 	GetDlgItem(IDC_EDIT_HOUR)->ShowWindow(SW_SHOW);
 	GetDlgItem(IDC_EDIT_MINUTE)->ShowWindow(SW_SHOW);
 	GetDlgItem(IDC_EDIT_SECOND)->ShowWindow(SW_SHOW);
-	GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("시작"));
+	GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("Start"));
 }
 
 void CTab1::StartTimer()
@@ -343,7 +343,7 @@ void CTab1::OnTimer(UINT_PTR nIDEvent)
 	switch (nIDEvent) {
 	case IDE_SYSTEM_COUNTER:
 		mSystemCounter->TicTok();
-		GetDlgItem(IDC_STATIC_COUNTER)->SetWindowTextW(mSystemCounter->GetTimeFormatted());
+		SetDlgItemTextW(IDC_STATIC_COUNTER, mSystemCounter->GetTimeFormatted());
 		break;
 	}
 

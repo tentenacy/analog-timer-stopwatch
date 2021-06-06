@@ -7,6 +7,7 @@
 #include "AnalogTimerStopwatchDlg.h"
 #include "afxdialogex.h"
 #include "SettingTimerDlg.h"
+#include "SettingSystemTimeDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -67,6 +68,7 @@ BEGIN_MESSAGE_MAP(CAnalogTimerStopwatchDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB1, &CAnalogTimerStopwatchDlg::OnTcnSelchangeTab1)
 	ON_COMMAND(ID_32771, &CAnalogTimerStopwatchDlg::On32771)
+	ON_COMMAND(ID_32772, &CAnalogTimerStopwatchDlg::On32772)
 END_MESSAGE_MAP()
 
 HHOOK g_hook = NULL;
@@ -123,8 +125,8 @@ BOOL CAnalogTimerStopwatchDlg::OnInitDialog()
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	SetHook();
 
-	mTab.InsertItem(0, _T("타이머"));
-	mTab.InsertItem(1, _T("스톱워치"));
+	mTab.InsertItem(0, _T("Timer"));
+	mTab.InsertItem(1, _T("Stopwatch"));
 
 	mTab.SetCurSel(0);
 
@@ -246,4 +248,12 @@ BOOL CAnalogTimerStopwatchDlg::DestroyWindow()
 	UnHook();
 
 	return CDialogEx::DestroyWindow();
+}
+
+
+void CAnalogTimerStopwatchDlg::On32772()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CSettingSystemTimeDlg dlg;
+	dlg.DoModal();
 }

@@ -120,8 +120,8 @@ BOOL CTab2::OnInitDialog()
 	mLabList.GetClientRect(&rect);
 	int width = rect.Width();
 	width -= GetSystemMetrics(SM_CXVSCROLL);
-	mLabList.InsertColumn(0, _T("·¦"), LVCFMT_LEFT, 260);
-	mLabList.InsertColumn(1, _T("±â·Ï"), LVCFMT_LEFT, width - 260);
+	mLabList.InsertColumn(0, _T("Lab"), LVCFMT_LEFT, 260);
+	mLabList.InsertColumn(1, _T("Time"), LVCFMT_LEFT, width - 260);
 
 	AllocateWatch();
 
@@ -173,16 +173,16 @@ void CTab2::OnBnClickedButtonStart()
 	}
 
 	if (mThreadStopwatchWork == THREAD_RUNNING) {
-		GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("½ÃÀÛ"));
-		GetDlgItem(IDC_BUTTON_LAB)->SetWindowTextW(_T("Àç¼³Á¤"));
+		GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("Start"));
+		GetDlgItem(IDC_BUTTON_LAB)->SetWindowTextW(_T("Reset"));
 		mThreadStopwatch->SuspendThread();
 		mThreadStopwatchWork = THREAD_PAUSE;
 		mWatchSecond->PauseWatch();
 		mWatchMinute->PauseWatch();
 	}
 	else if (mThreadStopwatchWork == THREAD_PAUSE) {
-		GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("Áß´Ü"));
-		GetDlgItem(IDC_BUTTON_LAB)->SetWindowTextW(_T("·¦"));
+		GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("Pause"));
+		GetDlgItem(IDC_BUTTON_LAB)->SetWindowTextW(_T("Lab"));
 		mThreadStopwatch->ResumeThread();
 		mThreadStopwatchWork = THREAD_RUNNING;
 		mWatchSecond->ResumeWatch();
@@ -206,8 +206,8 @@ void CTab2::OnBnClickedButtonLab()
 
 void CTab2::StartStopwatch() {
 	GetDlgItem(IDC_BUTTON_LAB)->EnableWindow(TRUE);
-	GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("Áß´Ü"));
-	GetDlgItem(IDC_BUTTON_LAB)->SetWindowTextW(_T("·¦"));
+	GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("Pause"));
+	GetDlgItem(IDC_BUTTON_LAB)->SetWindowTextW(_T("Lab"));
 
 	
 	mStopwatch = new CustomStopwatch();
@@ -226,8 +226,8 @@ void CTab2::StartStopwatch() {
 
 void CTab2::StopStopwatch() {
 	GetDlgItem(IDC_BUTTON_LAB)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("½ÃÀÛ"));
-	GetDlgItem(IDC_BUTTON_LAB)->SetWindowTextW(_T("·¦"));
+	GetDlgItem(IDC_BUTTON_START)->SetWindowTextW(_T("Start"));
+	GetDlgItem(IDC_BUTTON_LAB)->SetWindowTextW(_T("Lab"));
 
 	mThreadStopwatch->SuspendThread();
 	DWORD dwResult;
@@ -273,7 +273,7 @@ void CTab2::OnDestroy()
 void CTab2::LabStopwatch()
 {
 	CString labName;
-	labName.Format(_T("·¦ %d"), mLabList.GetItemCount() + 1);
+	labName.Format(_T("Lab %d"), mLabList.GetItemCount() + 1);
 	mLabList.InsertItem(0, labName);
 	mLabList.SetItemText(0, 1, mStopwatch->GetLabTimeFormatted());
 	mStopwatch->SetPrevLabTime(mStopwatch->GetPrevLabTime() + mStopwatch->GetLabTime());

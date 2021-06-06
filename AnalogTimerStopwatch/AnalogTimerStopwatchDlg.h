@@ -45,4 +45,5 @@ public:
 	BOOL SetHook();
 	BOOL UnHook();
 	virtual BOOL DestroyWindow();
+	afx_msg void On32772();
 };

@@ -37,13 +37,13 @@ void CustomSystemCounter::UpdateTime() {
 CString CustomSystemCounter::GetTimeFormatted() {
 	CString ret;
 	if(mHour < 12) {
-		ret.Format(_T("오전 %d:%02d:%02d"), mHour , mMinute, mSecond);
+		ret.Format(_T("AM %d:%02d:%02d"), mHour , mMinute, mSecond);
 	}
 	else if (mHour == 12) {
-		ret.Format(_T("오후 %d:%02d:%02d"), mHour, mMinute, mSecond);
+		ret.Format(_T("PM %d:%02d:%02d"), mHour, mMinute, mSecond);
 	}
 	else if (mHour > 12) {
-		ret.Format(_T("오후 %d:%02d:%02d"), mHour-12, mMinute, mSecond);
+		ret.Format(_T("PM %d:%02d:%02d"), mHour-12, mMinute, mSecond);
 	}
 	
 	return ret;
