@@ -65,7 +65,7 @@ UINT StopwatchThread(LPVOID param)
 			end -= end - prevEnd;
 		}
 
-		Sleep(2);
+		Sleep(16);
 		stopwatch->SetTime(double(end - start));
 		::PostMessage(pMain->m_hWnd, THREAD_STOPWATCH, THREAD_UPDATE_STOPWATCH, NULL);
 	}

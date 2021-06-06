@@ -77,7 +77,7 @@ UINT TimerThread(LPVOID param)
 		
 		threadTimerUpdateParam.time = double(end - start);
 		::PostMessage(pMain->m_hWnd, THREAD_TIMER, THREAD_UPDATE_PROGRESS, (LPARAM)&threadTimerUpdateParam);
-		Sleep(10);
+		Sleep(8);
 		if (double(end - start) >= 1000 * i) {
 			i += 1;
 			timer->TicTok();
